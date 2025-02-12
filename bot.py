@@ -1,6 +1,4 @@
-import base64
-
-from telegram import Update, PhotoSize
+from telegram import Update
 from telegram.ext import filters, ApplicationBuilder, CallbackQueryHandler, ContextTypes, CommandHandler, MessageHandler
 from gpt import ChatGptService
 from util import (load_message, send_text, send_image, show_main_menu, load_prompt, send_text_buttons,bot_mode,quiz_counter)
@@ -115,7 +113,13 @@ async def gpt(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def gpt_question(update: Update, context: ContextTypes.DEFAULT_TYPE, question):
     answer = await chat_gpt.add_message(question)
-    await send_text(update, context, answer)
+    await send_text_buttons(update, context, answer,{'gpt_quit':'Завершити'})
+
+async def gpt_buttons(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.callback_query.answer()
+    button = update.callback_query.data
+    if button == 'gpt_quit':
+        await start(update,context)
 
 async def talk(update: Update, context: ContextTypes.DEFAULT_TYPE):
     bot_mode.mode = 'talk'
@@ -243,7 +247,10 @@ app.add_handler(CallbackQueryHandler(talk_buttons, pattern='^talk_'))
 app.add_handler(CallbackQueryHandler(quiz_buttons, pattern='^quiz_'))
 app.add_handler(CallbackQueryHandler(translator_buttons, pattern='^translator_'))
 app.add_handler(CallbackQueryHandler(image_buttons, pattern='^image_'))
+app.add_handler(CallbackQueryHandler(gpt_buttons, pattern='^gpt_'))
 app.add_handler(CallbackQueryHandler(default_callback_handler))
 app.add_handler(MessageHandler(filters.TEXT, message_handler))
 app.add_handler(MessageHandler(filters.PHOTO, photo_handler))
 app.run_polling()
+
+

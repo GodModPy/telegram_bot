@@ -1,6 +1,6 @@
-from openai import OpenAI
 import httpx as httpx
-import credentials
+from openai import OpenAI
+
 import util
 
 
