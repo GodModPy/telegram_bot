@@ -90,9 +90,9 @@ def load_prompt(name):
         return file.read()
 
 
-class quiz_counter:
+class QuizCounter:
     questions_count = 0
     wright_answers = 0
 
-class bot_mode:
+class BotMode:
     pass
