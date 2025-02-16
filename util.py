@@ -89,7 +89,7 @@ def load_prompt(name):
               encoding="utf8") as file:
         return file.read()
 
-
+# службові класи
 class QuizCounter:
     questions_count = 0
     wright_answers = 0
